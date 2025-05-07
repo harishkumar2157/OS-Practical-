@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main() {
+    pid_t pid;
+
+    // Start
+    pid = fork();  // Call fork() system call to create a child process
+
+    if (pid == 0) {
+        // This is the Child Process
+        pid_t child_pid = getpid();      // Get PID using getpid()
+        pid_t parent_pid = getppid();    // Get Parent PID using getppid()
+        printf("Child Process: PID = %d, PPID = %d\n", child_pid, parent_pid);
+    }
+    else if (pid > 0) {
+        // This is the Parent Process
+        pid_t parent_pid = getpid();     // Get PID using getpid()
+        pid_t grandparent_pid = getppid(); // Get Parent PID using getppid()
+        printf("Parent Process: PID = %d, PPID = %d\n", parent_pid, grandparent_pid);
+    }
+    else {
+        // Fork failed
+        printf("Fork failed\n");
+        return 1;
+    }
+
+    // End
+    return 0;
+}
