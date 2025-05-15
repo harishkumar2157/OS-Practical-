@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+
+void print_permissions(mode_t mode) {
+    printf("File Permissions: ");
+    printf((mode & S_IRUSR) ? "r" : "-"); // Owner Read
+    printf((mode & S_IWUSR) ? "w" : "-"); // Owner Write
+    printf((mode & S_IXUSR) ? "x" : "-"); // Owner Execute
+    printf((mode & S_IRGRP) ? "r" : "-"); // Group Read
+    printf((mode & S_IWGRP) ? "w" : "-"); // Group Write
+    printf((mode & S_IXGRP) ? "x" : "-"); // Group Execute
+    printf((mode & S_IROTH) ? "r" : "-"); // Others Read
+    printf((mode & S_IWOTH) ? "w" : "-"); // Others Write
+    printf((mode & S_IXOTH) ? "x" : "-"); // Others Execute
+    printf("\n");
+}
+
+int main() {
+    char filename[100];
+    struct stat fileStat;
+
+    printf("Enter the file name: ");
+    scanf("%s", filename);
+
+    if (stat(filename, &fileStat) < 0) {
+        perror("Unable to get file status");
+        return 1;
+    }
+
+    printf("\n--- File Access Info ---\n");
+    printf("File: %s\n", filename);
+    printf("Owner UID: %d\n", fileStat.st_uid);
+    printf("Group GID: %d\n", fileStat.st_gid);
+
+    print_permissions(fileStat.st_mode);
+
+    return 0;
+}
