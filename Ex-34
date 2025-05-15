@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+
+struct Record {
+    int recordID;
+    char data[50];
+};
+
+int main() {
+    struct Record file[10];
+    int n, i, searchID, found = 0;
+
+    printf("Enter number of records to store: ");
+    scanf("%d", &n);
+
+    // Input records sequentially
+    for (i = 0; i < n; i++) {
+        printf("Enter Record ID for record %d: ", i + 1);
+        scanf("%d", &file[i].recordID);
+        printf("Enter data for record %d: ", i + 1);
+        scanf(" %[^\n]", file[i].data);  // Read string with spaces
+    }
+
+    // Display all records
+    printf("\nSequential File Contents:\n");
+    for (i = 0; i < n; i++) {
+        printf("Record %d: ID = %d, Data = %s\n", i + 1, file[i].recordID, file[i].data);
+    }
+
+    // Simulate reading a specific record (sequential access)
+    printf("\nEnter Record ID to search: ");
+    scanf("%d", &searchID);
+
+    printf("\nSearching sequentially...\n");
+    for (i = 0; i < n; i++) {
+        printf("Checking Record ID %d\n", file[i].recordID);
+        if (file[i].recordID == searchID) {
+            printf("Record found: ID = %d, Data = %s\n", file[i].recordID, file[i].data);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Record with ID %d not found.\n", searchID);
+    }
+
+    return 0;
+}
