@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void sort(int arr[], int n) {
+    // Simple Bubble Sort
+    for (int i = 0; i < n - 1; i++)
+        for (int j = 0; j < n - i - 1; j++)
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+}
+
+int main() {
+    int n, head, disk_size;
+    printf("Enter the number of disk requests: ");
+    scanf("%d", &n);
+
+    int requests[n + 2]; // extra space for head and end points
+    printf("Enter the disk request sequence:\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &requests[i]);
+
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+
+    printf("Enter the total disk size (number of cylinders): ");
+    scanf("%d", &disk_size);
+
+    // Add head and end boundaries
+    requests[n] = head;
+    requests[n + 1] = disk_size - 1;
+    int size = n + 2;
+
+    sort(requests, size);
+
+    // Find position of head in sorted array
+    int index;
+    for (int i = 0; i < size; i++) {
+        if (requests[i] == head) {
+            index = i;
+            break;
+        }
+    }
+
+    int total_movement = 0;
+    printf("\nDisk head movement:\n");
+
+    // Move right
+    for (int i = index; i < size - 1; i++) {
+        printf("Move from %d to %d => Distance = %d\n", requests[i], requests[i + 1], abs(requests[i + 1] - requests[i]));
+        total_movement += abs(requests[i + 1] - requests[i]);
+    }
+
+    // Jump to beginning (cylinder 0)
+    printf("Jump from %d to 0 => Distance = %d\n", disk_size - 1, disk_size - 1);
+    total_movement += disk_size - 1;
+
+    // Continue from beginning to process remaining requests
+    for (int i = 0; i < index; i++) {
+        if (requests[i] != 0) {
+            printf("Move from %d to %d => Distance = %d\n", (i == 0 ? 0 : requests[i - 1]), requests[i], abs(requests[i] - (i == 0 ? 0 : requests[i - 1])));
+            total_movement += abs(requests[i] - (i == 0 ? 0 : requests[i - 1]));
+        }
+    }
+
+    printf("\nTotal head movement = %d cylinders\n", total_movement);
+
+    return 0;
+}
