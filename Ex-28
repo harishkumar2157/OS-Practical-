@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_LINE 256
+
+int main() {
+    char filename[50], keyword[50], line[MAX_LINE];
+    FILE *fp;
+    int found = 0;
+
+    // Get file name and keyword from user
+    printf("Enter file name: ");
+    scanf("%s", filename);
+
+    printf("Enter keyword to search: ");
+    scanf("%s", keyword);
+
+    // Open file
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    printf("\nLines containing \"%s\":\n\n", keyword);
+    
+    // Read and search line by line
+    while (fgets(line, sizeof(line), fp)) {
+        if (strstr(line, keyword)) {
+            printf("%s", line);
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("No matching lines found.\n");
+    }
+
+    fclose(fp);
+    return 0;
+}
