@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int file;
+    char buffer[100];
+
+    // Create and open a file using system call 'open'
+    file = open("demo.txt", O_CREAT | O_RDWR, 0644);
+    if (file < 0) {
+        perror("Error creating file");
+        return 1;
+    }
+
+    // Write to file using 'write'
+    write(file, "Hello, this is a test file.\n", 28);
+
+    // Move file pointer to beginning
+    lseek(file, 0, SEEK_SET);
+
+    // Read from file using 'read'
+    read(file, buffer, sizeof(buffer));
+    printf("Data read from file: %s", buffer);
+
+    // Close the file
+    close(file);
+
+    return 0;
+}
