@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+int counter = 0;
+pthread_mutex_t lock;
+
+void* increment(void* arg) {
+    for (int i = 0; i < 5; i++) {
+        pthread_mutex_lock(&lock);        // enter critical section
+
+        counter++;
+        printf("Thread 1 incremented counter to %d\n", counter);
+
+        pthread_mutex_unlock(&lock);      // exit critical section
+        sleep(1);
+    }
+    return NULL;
+}
+
+void* decrement(void* arg) {
+    for (int i = 0; i < 5; i++) {
+        pthread_mutex_lock(&lock);        // enter critical section
+
+        counter--;
+        printf("Thread 2 decremented counter to %d\n", counter);
+
+        pthread_mutex_unlock(&lock);      // exit critical section
+        sleep(1);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+
+    // Initialize the mutex
+    pthread_mutex_init(&lock, NULL);
+
+    // Create threads
+    pthread_create(&t1, NULL, increment, NULL);
+    pthread_create(&t2, NULL, decrement, NULL);
+
+    // Wait for threads to finish
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    // Destroy the mutex
+    pthread_mutex_destroy(&lock);
+
+    printf("Final counter value: %d\n", counter);
+
+    return 0;
+}
