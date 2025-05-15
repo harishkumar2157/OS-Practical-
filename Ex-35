@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+int main() {
+    int indexBlock[10], fileBlocks[100], fileSize, i;
+
+    printf("Enter number of blocks the file uses: ");
+    scanf("%d", &fileSize);
+
+    printf("Enter block numbers (logical blocks) used by the file:\n");
+    for (i = 0; i < fileSize; i++) {
+        printf("Enter block number for file block %d: ", i);
+        scanf("%d", &indexBlock[i]);
+    }
+
+    printf("\nIndex Block:\n");
+    for (i = 0; i < fileSize; i++) {
+        printf("Index[%d] -> Block %d\n", i, indexBlock[i]);
+    }
+
+    // Simulate accessing a specific block
+    int blockNumber;
+    printf("\nEnter logical block number to access (0 to %d): ", fileSize - 1);
+    scanf("%d", &blockNumber);
+
+    if (blockNumber >= 0 && blockNumber < fileSize) {
+        printf("Accessing File Block %d -> Physical Block %d\n", blockNumber, indexBlock[blockNumber]);
+    } else {
+        printf("Invalid block number!\n");
+    }
+
+    return 0;
+}
